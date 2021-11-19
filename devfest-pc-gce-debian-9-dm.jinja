@@ -1,0 +1,34 @@
+# Creates a Debian-9 based VM via Private Catalog
+{% set project = env["project"] %}
+{% set deployment = env["deployment"] %}
+{% set zone = properties["zone"] %}
+{% set machinetype = properties["machinetype"] %}
+{% if properties["prodstage"] == true %}
+  {% set prodstage = 'true' %}
+{% else %}
+  {% set prodstage = 'false' %}
+{% endif %}
+{% set vmname = properties["vmname"] %}
+{% set region = zone.split('-')[0:2]|join('-') %}
+
+resources:
+- type: compute.v1.instance
+  name: {{ vmname }}
+  properties:
+    zone: {{ zone }}
+    machineType: https://www.googleapis.com/compute/v1/projects/{{ project }}/zones/{{ zone }}/machineTypes/{{ machinetype }}
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        diskName: disk-{{ vmname }}-{{ deployment }}
+        sourceImage: https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/family/debian-9
+    networkInterfaces:
+    networkInterfaces:
+    - network: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/global/networks/default
+      subnetwork: https://www.googleapis.com/compute/v1/projects/{{ env["project"] }}/regions/europe-west3/subnetworks/default
+    labels:
+      prodectid: {{ project }}
+      prodstage: "{{ prodstage }}"

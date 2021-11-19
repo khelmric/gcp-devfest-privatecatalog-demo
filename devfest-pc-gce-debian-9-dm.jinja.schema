@@ -1,0 +1,43 @@
+info:
+  title: Google Compute Engine Machine - Debian 9
+  author: Kristof Helmrich
+  description: Creates a Debian 9 based virtual machine
+
+required:
+  - vmname
+
+properties:
+  machinetype:
+    title: Machine type
+    type: string
+    enum:
+      - n1-standard-1
+      - n1-standard-2
+      - n1-standard-4
+      - n1-highmem-2
+      - n1-highmem-4
+      - n1-highmem-8
+      - n1-highcpu-2
+      - n1-highcpu-4
+      - n1-highcpu-8
+      - f1-micro
+      - g1-small
+    default: n1-standard-1
+  zone:
+    title: Zone
+    type: string
+    enum:
+      - europe-west3-a
+      - europe-west3-b
+      - europe-west3-c
+    default: europe-west3-c
+  prodstage:
+    title: Prod Stage
+    type: boolean
+    enum:
+      - true
+      - false
+    default: false
+  vmname:
+    title: VM name
+    type: string
